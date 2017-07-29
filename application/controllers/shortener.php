@@ -62,10 +62,8 @@ class Shortener extends CI_Controller {
 				}
 			}
 		}
-		// echo json_encode($page_data);
-		$this->load->view('layout/header', $data);
-		$this->load->view('shorten', $page_data);
-		$this->load->view('layout/footer');
+		// $this->load->view('has_session');
+		$this->load->view('landing');
 	}
 
 	function short_ajax(){
@@ -105,7 +103,7 @@ class Shortener extends CI_Controller {
 			}
 		}
 		if (isset($page_data['short_url'])) {
-			echo json_encode(array('msg'=>'url', 'isi' => $page_data['short_url'], 'base'=> base_url()));
+			echo json_encode(array('msg'=>'url','long'=>$long, 'isi' => $page_data['short_url'], 'base'=> base_url()));
 		} else if (isset($page_data['error'])) {
 			echo json_encode(array('msg'=>'err', 'isi' => $page_data['error'], 'base'=> base_url()));
 		}
@@ -142,9 +140,14 @@ class Shortener extends CI_Controller {
 	public function get_shorty(){
 		$this->load->model('Url_model');
 		$urlShorty = $this->uri->segment(1);
-		$urlId = $this->Url_model->get_Id($urlShorty);
-		$this->add_count($urlId);
-		redirect($this->Url_model->long_url($urlShorty));
+		
+		if ($this->Url_model->long_url($urlShorty)) {
+			redirect($this->Url_model->long_url($urlShorty));
+			$urlId = $this->Url_model->get_Id($urlShorty);
+			$this->add_count($urlId);
+		}else{
+			$this->load->view('err404');
+		}
 	}
 
 	public function add_count($id){
@@ -162,11 +165,6 @@ class Shortener extends CI_Controller {
 	}
 
 	public function err_404(){
-		$page_data['error'] = 'Whoops cannot find that URL!';
-		$data['desc'] = 'Have A Nice Day!';
-		$this->load->view('layout/header', $data);
-		$this->load->view('err404', $page_data);
-		$this->load->view('layout/footer');
-
+		$this->load->view('err404');
 	}
 }

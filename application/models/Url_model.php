@@ -36,10 +36,36 @@ class Url_model extends CI_Model {
 
   function store_long($data){
     do{
-        $short_code = random_string('alnum', 5);
-        $this->db->where('short_url', $short_code);
-        $this->db->from('urls');
-        $num = $this->db->count_all_results();
+        
+        $number = rand(2,5);
+        switch ($number) {
+          case '2':
+            $short_code = random_string('alnum', 2);
+            $this->db->where('short_url', $short_code);
+            $this->db->from('urls');
+            $num = $this->db->count_all_results();
+            break;
+          
+          case '3':
+            $short_code = random_string('alnum', 3);
+            $this->db->where('short_url', $short_code);
+            $this->db->from('urls');
+            $num = $this->db->count_all_results();
+            break;
+          case '4':
+            $short_code = random_string('alnum', 4);
+            $this->db->where('short_url', $short_code);
+            $this->db->from('urls');
+            $num = $this->db->count_all_results();
+            break;
+          case '5':
+            $short_code = random_string('alnum', 5);
+            $this->db->where('short_url', $short_code);
+            $this->db->from('urls');
+            $num = $this->db->count_all_results();
+            break;
+        }
+
       } while($num>=1);
       $db_fill = array(
                         'short_url' => $short_code,
@@ -47,6 +73,8 @@ class Url_model extends CI_Model {
                         'url_timestamp' => $data['url_timestamp']);
 
        $query = $this->db->insert('urls', $db_fill);
+       $idInserted = $this->db->insert_id();
+       $this->insert_stat($idInserted);
        $result = $query;
       
       if ($result) {
@@ -67,8 +95,10 @@ class Url_model extends CI_Model {
                         'long_url' => $data['long_url'],
                         'url_timestamp' => $data['url_timestamp']);
 
-       $query = $this->db->insert('urls', $db_fill);
-       $result = $query;
+      $query = $this->db->insert('urls', $db_fill);
+      $idInserted = $this->db->insert_id();
+      $this->insert_stat($idInserted);
+      $result = $query;
       
       if ($result) {
                 return $cstm_url;
@@ -77,16 +107,20 @@ class Url_model extends CI_Model {
               }
   }
 
+  function insert_stat($lastID){
+    $stats = array('url_id'=>$lastID);
+    $query = $this->db->insert('stats', $stats);
+  }
+
   function long_url($shorty=''){
     $query=$this->db->get_where('urls', array('short_url'=> $shorty, ));
       if($query->num_rows()>0)
       {
         foreach ($query->result() as $row)
-      {
-          return $row->long_url;
-      }
-      }
-      return '/error_404';
+        {
+            return $row->long_url;
+        }
+      }else return false;
   }
   function get_Id($urlShort){
     $query = $this->db->get_where('urls',array('short_url' => $urlShort, ));
@@ -100,13 +134,13 @@ class Url_model extends CI_Model {
   }
 }
   function update_counter($id){
-    $this->db->where('id',urldecode($id));
-    $this->db->select('url_views');
-    $count = $this->db->get('urls')->row();
+    $this->db->where('url_id',urldecode($id));
+    $this->db->select('clicks');
+    $count = $this->db->get('stats')->row();
 
-    $this->db->where('id',urldecode($id));
-    $this->db->set('url_views', ($count->url_views + 1));
-    $this->db->update('urls');
+    $this->db->where('url_id',urldecode($id));
+    $this->db->set('clicks', ($count->clicks + 1));
+    $this->db->update('stats');
   }
 
 }

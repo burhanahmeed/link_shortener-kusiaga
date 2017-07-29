@@ -8,7 +8,7 @@
 <meta name="msapplication-navbutton-color" content="#003399">
 <!-- iOS Safari -->
 <meta name="apple-mobile-web-app-status-bar-style" content="#003399">
-	<title>Can't Find URL</title>
+	<title>Secured Link Shortener | Sign In</title>
 	<link rel="icon" href="<?php echo base_url();?>assets/img/logo.png">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url()?>assets/css/font-awesome.min.css">
@@ -32,10 +32,13 @@
 			<img src="<?php echo base_url()?>assets/img/log-1.png">
 		</div>
 		<div class="isi">
-			<h2>Whoops! We can't find the URL you requested</h2>
-			<form action="<?php echo base_url()?>">
-				<button>BACK</button>
-			</form>
+		<!-- php -->
+		<?php if (!empty($authUrl)) {
+			echo '<a href="'.$authUrl.'"><img src="assets/img/google.png"></a>';
+		} else{
+			echo "<p>".$userData['email'].	"</p>";
+		}?>
+			
 		</div>
 		</div>
 		<div class="foot">
@@ -47,13 +50,6 @@
 <script type="text/javascript" src="<?php echo base_url()?>assets/js/jQuery.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/js/bootstrap.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/js/front.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.16/clipboard.min.js"></script>
 
-<!-- custom -->
-<script type="text/javascript">
-	$(function() {
-    new Clipboard('#btn-shrt');
-	});	
-</script>
 
 </html>

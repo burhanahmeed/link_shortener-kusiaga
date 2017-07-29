@@ -1,0 +1,78 @@
+
+header a img{
+  height: 30px;
+  margin: 0 auto;
+  display: block;
+}
+
+nav.menu ul{
+  display: inline-block;
+  list-style: none;
+  padding: 1px;
+}
+.hamburger a{
+  display: none;
+}
+
+header{
+  background-color: black;
+  padding: 10px;
+}
+
+nav a{
+  padding: 10px;
+  color: white;
+  transition: .3s;
+}
+
+nav a:hover, nav a:focus{
+  background-color: #003399;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+}
+.user{
+  float: right;
+}
+.user a{
+  color: white;
+  text-decoration: none;
+}
+.user a:hover > li.drop{
+  display: block;
+}
+.user li{
+  display: none;
+  background-color: #302f2f;
+  /*padding: 10px;*/
+  list-style: none;
+  position: relative;
+  min-width: auto;
+}
+.user li ul{
+  color: white;
+  text-decoration: none;
+  list-style: none;
+  padding-left: 5px;
+  padding: 10px;
+}
+.user li ul:hover{
+  background-color: black;
+}
+.hamburger{
+  display: inline-block;
+}
+.hamburger a{
+  font-size: 20px;
+  color: white;
+}
+
+@media screen and (max-width: 480px){
+  .hamburger a{
+    display: block;
+  }
+  nav.menu{
+    display: none;
+  }
+  
+}
